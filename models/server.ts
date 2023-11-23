@@ -1,6 +1,7 @@
 import express, { Application } from 'express'
 import cors from 'cors'
 import routerAuthor from '../routes/author';
+import db from '../db/connection';
 class Server {
 
     private app: Application;
@@ -13,13 +14,25 @@ class Server {
         this.app = express();
         this.port = process.env.PORT || '3000';
 
-        //Route Definitions
+        //Metodos
         this.routes();
+        this.middlewares();
+        this.dbConnection();
     }
 
     // Configuration of Routing Service
     routes() {
         this.app.use( this.apiPaths.authors, routerAuthor)
+    }
+    
+    //DB Configuration
+    async dbConnection() {
+        try {
+            await db.authenticate();
+            console.log('Database Online')
+        } catch (error: any) {
+            throw new Error(error)
+        }
     }
 
     //Middlewares
