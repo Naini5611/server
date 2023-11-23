@@ -1,10 +1,14 @@
 import { Request, Response } from "express";
+import { Author } from "../models/author";
 
-export const getAuthors = (req: Request, res: Response) => {
+export const getAuthors = async (req: Request, res: Response) => {
 
+    const authors = await Author.findAll();
 
+    res.set('Access-Control-Allow-Origin', 'http://localhost:4200')
     res.json({
         msg: 'getAuthors',
+        data: authors
     })
 }
 

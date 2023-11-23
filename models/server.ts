@@ -37,11 +37,12 @@ class Server {
 
     //Middlewares
     middlewares() {
-        //CORS
-        this.app.use(cors({}));
 
         // Body reader
         this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
+        //CORS
+        this.app.use(cors());
 
         // public folder
         this.app.use( express.static('public'));

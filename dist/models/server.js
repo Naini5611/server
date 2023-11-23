@@ -46,10 +46,11 @@ class Server {
     }
     //Middlewares
     middlewares() {
-        //CORS
-        this.app.use((0, cors_1.default)({}));
         // Body reader
         this.app.use(express_1.default.json());
+        this.app.use(express_1.default.urlencoded({ extended: true }));
+        //CORS
+        this.app.use((0, cors_1.default)());
         // public folder
         this.app.use(express_1.default.static('public'));
     }
