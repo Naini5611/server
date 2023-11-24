@@ -16,20 +16,23 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const author_1 = __importDefault(require("../routes/author"));
 const connection_1 = __importDefault(require("../db/connection"));
+const institution_1 = __importDefault(require("../routes/institution"));
 class Server {
     constructor() {
         this.apiPaths = {
-            authors: '/api/authors'
+            authors: '/api/authors',
+            institutions: '/api/institutions',
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '3000';
         //Metodos
-        this.routes();
         this.middlewares();
+        this.routes();
         this.dbConnection();
     }
     // Configuration of Routing Service
     routes() {
+        this.app.use(this.apiPaths.institutions, institution_1.default);
         this.app.use(this.apiPaths.authors, author_1.default);
     }
     //DB Configuration
@@ -50,7 +53,22 @@ class Server {
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.urlencoded({ extended: true }));
         //CORS
-        this.app.use((0, cors_1.default)());
+        this.app.use((0, cors_1.default)({
+            origin: 'http://localhost:4200', // Cambia esto por el origen correcto de tu aplicación Angular
+            methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+            allowedHeaders: ['Content-Type', 'X-Custom-Header'],
+            preflightContinue: false,
+            optionsSuccessStatus: 204,
+            credentials: true
+        }));
+        this.app.options('*', (0, cors_1.default)({
+            origin: 'http://localhost:4200', // Cambia esto por el origen correcto de tu aplicación Angular
+            methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+            allowedHeaders: 'X-Custom-Header',
+            preflightContinue: false,
+            optionsSuccessStatus: 204,
+            credentials: true
+        }));
         // public folder
         this.app.use(express_1.default.static('public'));
     }

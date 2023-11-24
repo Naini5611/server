@@ -43,19 +43,11 @@ const getAuthor = (req, res) => {
 };
 exports.getAuthor = getAuthor;
 const postAuthor = (req, res) => {
-    res.set('Access-Control-Allow-Origin', 'http://localhost:4200');
-    res.set('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-    try {
-        const { body } = req;
-        const data = author_1.default.create(Object.assign({}, body));
-        res.json({
-            msg: 'postAuthor',
-            data
-        });
-    }
-    catch (error) {
-        console.log("🚀 ~ file: author.ts:47 ~ postAuthor ~ error:", error);
-    }
+    const { body } = req;
+    res.json({
+        msg: 'postAuthor',
+        body
+    });
 };
 exports.postAuthor = postAuthor;
 const putAuthor = (req, res) => {
@@ -75,4 +67,4 @@ const deleteAuthor = (req, res) => {
     });
 };
 exports.deleteAuthor = deleteAuthor;
-//# sourceMappingURL=author.js.map
+//# sourceMappingURL=author%20copy.js.map

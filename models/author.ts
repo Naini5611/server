@@ -1,25 +1,33 @@
 import { DataTypes } from 'sequelize'
 import db from '../db/connection'
+import Institucion, { IInstitucion } from './institucion';
 
-export const Author = db.define('autor', {
+const Author = db.define('autor', {
     id: { field: 'idAutor', type: DataTypes.INTEGER, primaryKey: true },
     nombre: { type: DataTypes.STRING },
     apellido: { type: DataTypes.STRING },
     direccion: { type: DataTypes.STRING },
     activo: { type: DataTypes.BOOLEAN },
     modificado: { type: DataTypes.DATE },
-    // dInstitucion: {type: DataTypes.INTEGER},
+    idInstitucion: {type: DataTypes.INTEGER},
 }, {
     tableName: 'autor',
-    timestamps: false 
-}
-)
+    timestamps: false
+});
 
+Author.hasOne(Institucion, {
+    foreignKey: 'idInstitucion', // Clave externa en el modelo Author
+    sourceKey: 'idInstitucion' // Clave primaria en el modelo Institucion
+});
+
+export default Author
 export interface IAuthor {
-    id: number;
+    id?: number;
     nombre: string;
     apellido: string;
     direccion: string;
     activo: boolean;
-    nodificado: Date
+    modificado?: Date
+    idInstitucion?: Date
+    institucion?: IInstitucion
 }

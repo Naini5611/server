@@ -1,15 +1,26 @@
 import { Request, Response } from "express";
-import { Author } from "../models/author";
+import Author from "../models/author";
+import Institucion from "../models/institucion";
 
 export const getAuthors = async (req: Request, res: Response) => {
+    try {
+        
+        const authors = await Author.findAll({
+            include: {
+                model: Institucion
+            }
+        });
+    
+        res.set('Access-Control-Allow-Origin', 'http://localhost:4200')
+        res.json({
+            msg: 'getAuthors',
+            data: authors
+        })
+    } catch (error) {
+        console.log("🚀 ~ file: author.ts:20 ~ getAuthors ~ error:", error)
+        throw new Error('Ocurrio un error mientras se leian los authores') ;
+    }
 
-    const authors = await Author.findAll();
-
-    res.set('Access-Control-Allow-Origin', 'http://localhost:4200')
-    res.json({
-        msg: 'getAuthors',
-        data: authors
-    })
 }
 
 export const getAuthor = (req: Request, res: Response) => {
@@ -23,13 +34,20 @@ export const getAuthor = (req: Request, res: Response) => {
 }
 
 export const postAuthor = (req: Request, res: Response) => {
+    res.set('Access-Control-Allow-Origin', 'http://localhost:4200')
+    res.set('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE')
 
-    const { body } = req;
+    try {
+        const { body } = req;
 
-    res.json({
-        msg: 'postAuthor',
-        body
-    })
+        const data = Author.create({ ...body })
+        res.json({
+            msg: 'postAuthor',
+            data
+        })
+    } catch (error) {
+        console.log("🚀 ~ file: author.ts:47 ~ postAuthor ~ error:", error)
+    }
 }
 
 export const putAuthor = (req: Request, res: Response) => {
